@@ -4,7 +4,7 @@ import flash.display.Bitmap;
 import flash.display.BlendMode;
 import org.flixel.FlxG;
 import org.flixel.FlxObject;
-import org.flixel.FlxPoint;
+import org.flixel.util.FlxPoint;
 import org.flixel.FlxTypedGroup;
 import org.flixel.FlxEmitter;
 

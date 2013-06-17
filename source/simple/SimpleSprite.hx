@@ -13,8 +13,9 @@ import org.flixel.FlxAssets;
 import org.flixel.FlxBasic;
 import org.flixel.FlxCamera;
 import org.flixel.FlxObject;
-import org.flixel.FlxPoint;
-import org.flixel.FlxU;
+import org.flixel.util.FlxAngle;
+import org.flixel.util.FlxArray;
+import org.flixel.util.FlxPoint;
 import org.flixel.plugin.texturepacker.TexturePackerData;
 import org.flixel.system.layer.DrawStackItem;
 import org.flixel.system.layer.frames.FlxFrame;
@@ -554,7 +555,7 @@ class SimpleSprite extends FlxObject
 		
 		if (!simpleRenderSprite())
 		{
-			radians = -(_flxFrame.additionalAngle) * FlxG.RAD;
+			radians = -(_flxFrame.additionalAngle) * FlxAngle.RAD;
 			cos = Math.cos(radians);
 			sin = Math.sin(radians);
 			
@@ -600,8 +601,8 @@ class SimpleSprite extends FlxObject
 		currDrawData[currIndex++] = _flxFrame.tileID;
 		
 		currDrawData[currIndex++] = a;
-		currDrawData[currIndex++] = b;
 		currDrawData[currIndex++] = -c;
+		currDrawData[currIndex++] = b;
 		currDrawData[currIndex++] = d;
 		
 		#if !js
@@ -865,7 +866,7 @@ class SimpleSprite extends FlxObject
 	 */
 	public function getFrameIndex(Frame:FlxFrame):Int
 	{
-		return FlxU.ArrayIndexOf(_framesData.frames, Frame);
+		return FlxArray.indexOf(_framesData.frames, Frame);
 	}
 	
 	/**
