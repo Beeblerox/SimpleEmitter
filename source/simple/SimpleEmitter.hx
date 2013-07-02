@@ -2,17 +2,18 @@ package simple;
 
 import flash.display.Bitmap;
 import flash.display.BlendMode;
-import org.flixel.FlxG;
-import org.flixel.FlxObject;
-import org.flixel.util.FlxPoint;
-import org.flixel.FlxTypedGroup;
-import org.flixel.FlxEmitter;
+import flixel.effects.particles.FlxEmitter;
+import flixel.FlxG;
+import flixel.FlxObject;
+import flixel.group.FlxTypedGroup;
+import flixel.group.FlxTypedGroup;
+import flixel.util.FlxPoint;
 
 class SimpleEmitter extends SimpleTypedEmitter<SimpleParticle>
 {
-	public function new(X:Float = 0, Y:Float = 0, Size:Int = 50)
+	public function new(X:Float = 0, Y:Float = 0, Size:Int = 50, ParticleClass:Class<SimpleParticle>)
 	{
-		super(X, Y, Size);
+		super(X, Y, Size, ParticleClass);
 	}
 }
 
@@ -131,7 +132,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 	 * @param	Y		The Y position of the emitter.
 	 * @param	Size	Optional, specifies a maximum capacity for this emitter.
 	 */
-	public function new(X:Float = 0, Y:Float = 0, Size:Int = 0)
+	public function new(X:Float = 0, Y:Float = 0, Size:Int = 0, ParticleClass:Class<T>)
 	{
 		super(Size);
 		
@@ -145,7 +146,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		endAlpha = new Bounds<Float>(1.0, 1.0);
 		blend = null;
 		acceleration = new FlxPoint(0, 0);
-		_particleClass = cast SimpleParticle;
+		_particleClass = cast ParticleClass;
 		particleDrag = new FlxPoint();
 		frequency = 0.1;
 		life = new Bounds<Float>(3, 3);
@@ -192,7 +193,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		maxSize = Quantity;
 		var totalFrames:Int = 1;
 		if (Multiple)
-		{ 
+		{
 			var sprite:SimpleSprite = new SimpleSprite();
 			sprite.loadGraphic(Graphics, true);
 			totalFrames = sprite.frames;
@@ -207,7 +208,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 			particle = Type.createInstance(_particleClass, []);
 			if (Multiple)
 			{
-				randomFrame = Std.int(FlxG.random() * totalFrames); 
+				randomFrame = Std.int(Math.random() * totalFrames);
 				particle.loadGraphic(Graphics, true);
 				particle.frame = randomFrame;
 			}
@@ -335,12 +336,12 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		var particle:SimpleParticle = recycle(cast SimpleParticle);
 		particle.elasticity = bounce;
 		
-		particle.reset(x - (Std.int(particle.width) >> 1) + FlxG.random() * width, y - (Std.int(particle.height) >> 1) + FlxG.random() * height);
+		particle.reset(x - (Std.int(particle.width) >> 1) + Math.random() * width, y - (Std.int(particle.height) >> 1) + Math.random() * height);
 		particle.visible = true;
 		
 		if (life.min != life.max)
 		{
-			particle.lifespan = particle.maxLifespan = life.min + FlxG.random() * (life.max - life.min);
+			particle.lifespan = particle.maxLifespan = life.min + Math.random() * (life.max - life.min);
 		}
 		else
 		{
@@ -349,7 +350,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		
 		if (startAlpha.min != startAlpha.max)
 		{
-			particle.startAlpha = startAlpha.min + FlxG.random() * (startAlpha.max - startAlpha.min);
+			particle.startAlpha = startAlpha.min + Math.random() * (startAlpha.max - startAlpha.min);
 		}
 		else
 		{
@@ -360,7 +361,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		var particleEndAlpha:Float = endAlpha.min;
 		if (endAlpha.min != endAlpha.max)
 		{
-			particleEndAlpha = endAlpha.min + FlxG.random() * (endAlpha.max - endAlpha.min);
+			particleEndAlpha = endAlpha.min + Math.random() * (endAlpha.max - endAlpha.min);
 		}
 		
 		if (particleEndAlpha != particle.startAlpha)
@@ -376,7 +377,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		
 		if (startScale.min != startScale.max)
 		{
-			particle.startScale = startScale.min + FlxG.random() * (startScale.max - startScale.min);
+			particle.startScale = startScale.min + Math.random() * (startScale.max - startScale.min);
 		}
 		else
 		{
@@ -387,7 +388,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		var particleEndScale:Float = endScale.min;
 		if (endScale.min != endScale.max)
 		{
-			particleEndScale = endScale.min + Std.int(FlxG.random() * (endScale.max - endScale.min));
+			particleEndScale = endScale.min + Std.int(Math.random() * (endScale.max - endScale.min));
 		}
 		
 		if (particleEndScale != particle.startScale)
@@ -405,7 +406,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		
 		if (xVelocity.min != xVelocity.max)
 		{
-			particle.velocity.x = xVelocity.min + FlxG.random() * (xVelocity.max - xVelocity.min);
+			particle.velocity.x = xVelocity.min + Math.random() * (xVelocity.max - xVelocity.min);
 		}
 		else
 		{
@@ -413,7 +414,7 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		}
 		if (yVelocity.min != yVelocity.max)
 		{
-			particle.velocity.y = yVelocity.min + FlxG.random() * (yVelocity.max - yVelocity.min);
+			particle.velocity.y = yVelocity.min + Math.random() * (yVelocity.max - yVelocity.min);
 		}
 		else
 		{
@@ -473,10 +474,10 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 	 */
 	public function setScale(startMin:Float = 1, startMax:Float = 1, endMin:Float = 1, endMax:Float = 1):Void
 	{
-		if (startMax < startMin)	
+		if (startMax < startMin)
 			startMax = startMin;
 		
-		if (endMax < endMin)		
+		if (endMax < endMin)
 			endMax = endMin;
 		
 		startScale.min = startMin;
@@ -529,12 +530,12 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 	 */
 	public var particleClass(get_particleClass, set_particleClass):Class<T>;
 	
-	private function get_particleClass():Class<T> 
+	private function get_particleClass():Class<T>
 	{
 		return _particleClass;
 	}
 	
-	private function set_particleClass(value:Class<T>):Class<T> 
+	private function set_particleClass(value:Class<T>):Class<T>
 	{
 		return _particleClass = value;
 	}
@@ -630,5 +631,21 @@ class SimpleTypedEmitter<T:SimpleParticle> extends FlxTypedGroup<SimpleParticle>
 		life.min = value;
 		life.max = value + dl;
 		return value;
+	}
+	
+}
+
+/**
+ * Helper object for holding bounds of different variables
+ */
+class Bounds<T>
+{
+	public var min:T;
+	public var max:T;
+
+	public function new(min:T, max:Null<T> = null)
+	{
+		this.min = min;
+		this.max = max == null ? min : max;
 	}
 }

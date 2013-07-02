@@ -1,5 +1,5 @@
 package;
-import org.flixel.FlxGame;
+import flixel.FlxGame;
 
 
 class ParticleTest extends FlxGame
