@@ -530,7 +530,7 @@ class SimpleSprite extends FlxObject
 			_matrix.identity();
 			_matrix.translate( -_halfWidth, -_halfHeight);
 			_matrix.scale(scale.x, scale.y);
-			_matrix.translate(_point.x + _halfWidth, _point.y + _halfHeight);
+			_matrix.translate(Std.int(_point.x + _halfWidth), Std.int(_point.y + _halfHeight));
 			camera.buffer.draw(framePixels, _matrix, null, blend, null, antialiasing);
 		}
 #else
