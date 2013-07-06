@@ -4,28 +4,28 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.BlendMode;
 import flash.display.Graphics;
+import flixel.system.FlxAssets;
+import flixel.util.loaders.TexturePackerData;
 import openfl.display.Tilesheet;
 import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import org.flixel.FlxAssets;
-import org.flixel.FlxBasic;
-import org.flixel.FlxCamera;
-import org.flixel.FlxObject;
-import org.flixel.util.FlxAngle;
-import org.flixel.util.FlxArray;
-import org.flixel.util.FlxPoint;
-import org.flixel.plugin.texturepacker.TexturePackerData;
-import org.flixel.system.layer.DrawStackItem;
-import org.flixel.system.layer.frames.FlxFrame;
-import org.flixel.system.layer.Node;
+import flixel.FlxBasic;
+import flixel.FlxCamera;
+import flixel.FlxObject;
+import flixel.util.FlxAngle;
+import flixel.util.FlxArray;
+import flixel.util.FlxPoint;
+import flixel.system.layer.DrawStackItem;
+import flixel.system.layer.frames.FlxFrame;
+import flixel.system.layer.Node;
 
 #if !flash
-import org.flixel.system.layer.TileSheetData;
+import flixel.system.layer.TileSheetData;
 #end
 
-import org.flixel.FlxG;
+import flixel.FlxG;
 
 /**
  * The main "game object" class, the sprite is a <code>FlxObject</code>
@@ -50,7 +50,7 @@ class SimpleSprite extends FlxObject
 	
 	private var _flipped:Int;
 	
-	private function get_flipped():Int 
+	private function get_flipped():Int
 	{
 		return _flipped;
 	}
@@ -202,7 +202,7 @@ class SimpleSprite extends FlxObject
 		{
 			framePixels.dispose();
 		}
-		framePixels = null;	
+		framePixels = null;
 		#if flash
 		blend = null;
 		#else
@@ -229,10 +229,10 @@ class SimpleSprite extends FlxObject
 	public function loadGraphic(Graphic:Dynamic, Animated:Bool = false, Reverse:Bool = false, Width:Int = 0, Height:Int = 0, Unique:Bool = false, Key:String = null):SimpleSprite
 	{
 		#if !flash
-		_pixels = FlxG.addBitmap(Graphic, false, Unique, Key);
-		_bitmapDataKey = FlxG._lastBitmapDataKey;
+		_pixels = FlxG.bitmap.add(Graphic, false, Unique, Key);
+		_bitmapDataKey = FlxG.bitmap._lastBitmapDataKey;
 		#else
-		_pixels = FlxG.addBitmap(Graphic, Reverse, Unique, Key);
+		_pixels = FlxG.bitmap.add(Graphic, Reverse, Unique, Key);
 		#end
 		
 		if (Reverse)
@@ -280,8 +280,8 @@ class SimpleSprite extends FlxObject
 		{
 			Key += "FrameSize:" + Width + "_" + Height;
 		}
-		_pixels = FlxG.addBitmap(Graphic, false, Unique, Key, Width, Height);
-		_bitmapDataKey = FlxG._lastBitmapDataKey;
+		_pixels = FlxG.bitmap.add(Graphic, false, Unique, Key, Width, Height);
+		_bitmapDataKey = FlxG.bitmap._lastBitmapDataKey;
 		#else
 		nullTextureData();
 		#end
@@ -303,9 +303,9 @@ class SimpleSprite extends FlxObject
 	 */
 	public function makeGraphic(Width:Int, Height:Int, Color:Int = 0xffffffff, Unique:Bool = false, Key:String = null):SimpleSprite
 	{
-		_pixels = FlxG.createBitmap(Width, Height, Color, Unique, Key);
+		_pixels = FlxG.bitmap.create(Width, Height, Color, Unique, Key);
 		#if !flash
-		_bitmapDataKey = FlxG._lastBitmapDataKey;
+		_bitmapDataKey = FlxG.bitmap._lastBitmapDataKey;
 		#else
 		nullTextureData();
 		#end
@@ -319,18 +319,18 @@ class SimpleSprite extends FlxObject
 	/**
 	 * Loads TexturePacker atlas.
 	 * @param	Data		Atlas data holding links to json-data and atlas image
-	 * @param	Reverse		Whether you need this class to generate horizontally flipped versions of the animation frames. 
+	 * @param	Reverse		Whether you need this class to generate horizontally flipped versions of the animation frames.
 	 * @param	Unique		Optional, whether the graphic should be a unique instance in the graphics cache.  Default is false.
 	 * @param	FrameName	Default frame to show. If null then will be used first available frame.
-	 * 
+	 *
 	 * @return This FlxSprite instance (nice for chaining stuff together, if you're into that).
 	 */
 	public function loadImageFromTexture(Data:TexturePackerData, Reverse:Bool = false, Unique:Bool = false, FrameName:String = null):SimpleSprite
 	{
 		_textureData = Data;
 		
-		_pixels = FlxG.addBitmap(Data.assetName, false, Unique);
-		_bitmapDataKey = FlxG._lastBitmapDataKey;
+		_pixels = FlxG.bitmap.add(Data.assetName, false, Unique);
+		_bitmapDataKey = FlxG.bitmap._lastBitmapDataKey;
 		
 		if (Reverse)
 		{
@@ -469,7 +469,7 @@ class SimpleSprite extends FlxObject
 			}
 		}
 		
-		if (dirty)	//rarely 
+		if (dirty)	//rarely
 		{
 			calcFrame();
 		}
@@ -530,7 +530,7 @@ class SimpleSprite extends FlxObject
 			_matrix.identity();
 			_matrix.translate( -_halfWidth, -_halfHeight);
 			_matrix.scale(scale.x, scale.y);
-			_matrix.translate(_point.x + _halfWidth, _point.y + _halfHeight);
+			_matrix.translate(Std.int(_point.x + _halfWidth), Std.int(_point.y + _halfHeight));
 			camera.buffer.draw(framePixels, _matrix, null, blend, null, antialiasing);
 		}
 #else
@@ -555,7 +555,7 @@ class SimpleSprite extends FlxObject
 		
 		if (!simpleRenderSprite())
 		{
-			radians = -(_flxFrame.additionalAngle) * FlxAngle.RAD;
+			radians = -(_flxFrame.additionalAngle) * FlxAngle.TO_RAD;
 			cos = Math.cos(radians);
 			sin = Math.sin(radians);
 			
@@ -680,7 +680,7 @@ class SimpleSprite extends FlxObject
 	 */
 	public function randomFrame():Void
 	{
-		_curIndex = Std.int(FlxG.random() * frames);
+		_curIndex = Std.int(Math.random() * frames);
 		#if !flash
 		if (_framesData != null)
 		#else
@@ -715,11 +715,11 @@ class SimpleSprite extends FlxObject
 		height = frameHeight = _pixels.height;
 		resetHelpers();
 		#if !flash
-		_bitmapDataKey = FlxG.getCacheKeyFor(_pixels);
+		_bitmapDataKey = FlxG.bitmap.getCacheKeyFor(_pixels);
 		if (_bitmapDataKey == null)
 		{
-			_bitmapDataKey = FlxG.getUniqueBitmapKey();
-			FlxG.addBitmap(Pixels, false, false, _bitmapDataKey);
+			_bitmapDataKey = FlxG.bitmap.getUniqueKey();
+			FlxG.bitmap.add(Pixels, false, false, _bitmapDataKey);
 		}
 		#else
 		nullTextureData();
@@ -799,7 +799,7 @@ class SimpleSprite extends FlxObject
 	
 	/**
 	 * Tell the sprite to change to a specific frame of animation.
-	 * 
+	 *
 	 * @param	Frame	The frame you want to display.
 	 */
 	private function get_frame():Int
@@ -981,7 +981,7 @@ class SimpleSprite extends FlxObject
 		if (AreYouSure)
 		{
 	#end
-			if (_useColorTransform) 
+			if (_useColorTransform)
 			{
 				framePixels.colorTransform(_flashRect, _colorTransform);
 			}
@@ -1010,7 +1010,7 @@ class SimpleSprite extends FlxObject
 	public var simpleRender(get_simpleRender, null):Bool;
 	
 	private function get_simpleRender():Bool
-	{ 
+	{
 		return simpleRenderSprite();
 	}
 	
@@ -1032,12 +1032,12 @@ class SimpleSprite extends FlxObject
 	#if !flash
 	public var blend(get_blend, set_blend):BlendMode;
 	
-	private function get_blend():BlendMode 
+	private function get_blend():BlendMode
 	{
 		return _blend;
 	}
 	
-	private function set_blend(value:BlendMode):BlendMode 
+	private function set_blend(value:BlendMode):BlendMode
 	{
 		if (value != null)
 		{

@@ -1,7 +1,7 @@
 package simple;
-import org.flixel.FlxBasic;
-import org.flixel.FlxG;
-import org.flixel.FlxObject;
+import flixel.FlxBasic;
+import flixel.FlxG;
+import flixel.FlxObject;
 	
 /**
  * This is a simple particle class that extends the default behavior
@@ -167,7 +167,7 @@ class SimpleParticle extends SimpleSprite
 		}
 	}
 	
-	override public function reset(X:Float, Y:Float):Void 
+	override public function reset(X:Float, Y:Float):Void
 	{
 		super.reset(X, Y);
 		
@@ -179,5 +179,5 @@ class SimpleParticle extends SimpleSprite
 	 * Triggered whenever this object is launched by a <code>FlxEmitter</code>.
 	 * You can override this to add custom behavior like a sound or AI or something.
 	 */
-	public function onEmit():Void { }	
+	public function onEmit():Void { }
 }

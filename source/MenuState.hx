@@ -1,9 +1,9 @@
 package;
+import flixel.FlxG;
+import flixel.FlxState;
+import flixel.text.FlxText;
 
 import flash.ui.Mouse;
-import org.flixel.FlxG;
-import org.flixel.FlxState;
-import org.flixel.FlxText;
 
 class MenuState extends FlxState
 {
