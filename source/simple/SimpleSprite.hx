@@ -474,7 +474,7 @@ class SimpleSprite extends FlxObject
 			calcFrame();
 		}
 		
-		var camera:FlxCamera = FlxG.cameras.defaultCamera;
+		var camera:FlxCamera = FlxG.camera;
 		
 	#if !flash
 		var drawItem:DrawStackItem;
@@ -886,7 +886,7 @@ class SimpleSprite extends FlxObject
 	{
 		if (Camera == null)
 		{
-			Camera = FlxG.cameras.defaultCamera;
+			Camera = FlxG.camera;
 		}
 		getScreenXY(_point, Camera);
 		
@@ -1079,7 +1079,7 @@ class SimpleSprite extends FlxObject
 
 		if (Camera == null)
 		{
-			Camera = FlxG.cameras.defaultCamera;
+			Camera = FlxG.camera;
 		}
 		var X:Float = point.x - Camera.scroll.x;
 		var Y:Float = point.y - Camera.scroll.y;
